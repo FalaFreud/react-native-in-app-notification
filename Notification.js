@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Animated, StyleSheet, Image } from 'react-native';
+import { Animated, StyleSheet, Image, Platform, Dimensions } from 'react-native';
 import DefaultNotificationBody from './DefaultNotificationBody';
 
 const styles = StyleSheet.create({
@@ -84,6 +84,16 @@ class Notification extends Component {
     }).start(done);
   }
 
+  isIphoneX() {
+    const window = Dimensions.get('window');
+    return (
+        Platform.OS === 'ios' &&
+        !Platform.isPad &&
+        !Platform.isTVOS &&
+        (window.height === 812 && window.width === 375)
+    );
+  };
+
   render() {
     const {
       height,
@@ -115,7 +125,7 @@ class Notification extends Component {
             transform: [{
               translateY: animatedValue.interpolate({
                 inputRange: [0, 1],
-                outputRange: [-height + topOffset, 0],
+                outputRange: [-height + topOffset + (this.isIphoneX() ? -height : 0), 0],
               }),
             }],
           },

@@ -8,6 +8,7 @@
 3. [Props](#props)
 4. [Usage](#usage)
 5. [Example](#example)
+6. [iPhone X](#iphone-x)
 
 ## UI
 The basic look of `react-native-in-app-notification`:
@@ -81,3 +82,39 @@ class MyApp extends Component {
   }
 }
 ```
+
+
+## iPhone X
+For iPhone X, hide the notification above notification bar.
+
+```javascript
+isIphoneX() {
+  const window = Dimensions.get('window');
+  return (
+      Platform.OS === 'ios' &&
+      !Platform.isPad &&
+      !Platform.isTVOS &&
+      (window.height === 812 && window.width === 375)
+  );
+};
+
+render() {
+  return (
+    <Animated.View
+      style={[
+        styles.notification,
+        { height, backgroundColor: backgroundColour },
+        {
+          transform: [{
+            translateY: animatedValue.interpolate({
+              inputRange: [0, 1],
+              outputRange: [-height + topOffset + (this.isIphoneX() ? -height : 0), 0],
+            }),
+          }],
+        },
+      ]}
+    >
+    </Animated.View>
+  )
+}
+``` 
